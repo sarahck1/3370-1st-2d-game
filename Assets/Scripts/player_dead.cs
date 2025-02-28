@@ -4,6 +4,8 @@ using UnityEngine.UI;  // For UI elements like Text
 
 public class player_dead : MonoBehaviour
 {
+    public ParticleSystem collisionParticleSystem;
+    public bool once = true;
     public GameObject gameOverText;  
         private void Start()
     {
@@ -27,8 +29,15 @@ public class player_dead : MonoBehaviour
 
         if (collision.gameObject.CompareTag("power_up"))
         {
+            var em = collisionParticleSystem.emission;
             Destroy(collision.gameObject); 
             score_manager.instance.addPoints();  
+            if(once)
+            {
+                em.enabled = true;
+                collisionParticleSystem.Play();
+                once = false;
+            }
         }
     }
 
@@ -40,7 +49,7 @@ public class player_dead : MonoBehaviour
             gameOverText.SetActive(true);
         }
 
-        // Pause the game (optional, to stop movement, etc.)
+        // Pause the game 
         Time.timeScale = 0;
     }
 
